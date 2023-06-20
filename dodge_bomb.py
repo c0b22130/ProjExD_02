@@ -92,16 +92,20 @@ def main():
                 sum_mv[0]+=mv[0]
                 sum_mv[1]+=mv[1]
         kk_rct.move_ip(sum_mv)
+
         if offscreen_judge(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
+
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
+
         bomb_rct.move_ip(vx,vy)
         yoko,tate=offscreen_judge(bomb_rct)
         if not yoko:
             vx*=-1
         if not tate:
             vy*=-1
+            
         screen.blit(bomb,bomb_rct)
         pg.display.update()
         tmr += 1
