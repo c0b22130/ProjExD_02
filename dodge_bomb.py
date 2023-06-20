@@ -80,7 +80,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        if kk_rct.colliderect(bomb_rct):
+        if kk_rct.colliderect(bomb_rct):  #衝突したら
             screen.blit(go_img, [630,60])
             pg.display.update()
             clock.tick(0.4)
@@ -88,20 +88,20 @@ def main():
         
         key_lst=pg.key.get_pressed()
         sum_mv=[0,0] # 合計移動量
-        for k,mv in delta.items():
+        for k,mv in delta.items():  #移動
             if key_lst[k]:
                 sum_mv[0]+=mv[0]
                 sum_mv[1]+=mv[1]
         kk_rct.move_ip(sum_mv)
 
-        if offscreen_judge(kk_rct) != (True,True):
+        if offscreen_judge(kk_rct) != (True,True):  #こうかとんが画面の端に来たらそこから進まない
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
 
         bomb_rct.move_ip(vx,vy)
-        yoko,tate=offscreen_judge(bomb_rct)
+        yoko,tate=offscreen_judge(bomb_rct)  #ボールが画面の端に来たら跳ね返る
         if not yoko:
             vx*=-1
         if not tate:
