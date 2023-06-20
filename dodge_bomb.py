@@ -6,6 +6,16 @@ import pygame as pg
 WIDTH, HEIGHT = 1600, 900
 delta={pg.K_UP:(0,-5),pg.K_DOWN:(0,+5),pg.K_LEFT:(-5,0),pg.K_RIGHT:(+5,0)}
 
+
+def offscreen_judge(rct: pg.Rect) -> tuple[bool,bool]:
+    yoko, tate = True, True
+    if rct.left<0 or WIDTH<rct.right:
+       yoko=False
+    if rct.top<0 or HEIGHT<rct.bottom:
+        tate=False
+    return yoko,tate                                                                                                               
+                          
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -13,7 +23,7 @@ def main():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct=kk_img.get_rect()
-    kk_rct.center=900,400
+    kk_rct.center=800,450
     bomb=pg.Surface((20,20))
     pg.draw.circle(bomb,(255,0,0),(10,10),10)
     x=random.randint(0,WIDTH)
@@ -35,10 +45,16 @@ def main():
                 sum_mv[0]+=mv[0]
                 sum_mv[1]+=mv[1]
         kk_rct.move_ip(sum_mv)
-
+        if offscreen_judge(kk_rct) != (True,True):
+            kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
         bomb_rct.move_ip(vx,vy)
+        yoko,tate=offscreen_judge(bomb_rct)
+        if not yoko:
+            vx*=-1
+        if not tate:
+            vy*=-1
         screen.blit(bomb,bomb_rct)
         pg.display.update()
         tmr += 1
